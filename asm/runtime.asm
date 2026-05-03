@@ -1,0 +1,39 @@
+; Defines jump table from the api.asm
+; Defined the entry point at address 2000H
+
+NAME RUNTIME
+EXTRN  MAIN
+PUBLIC ENTRY
+
+PUBLIC CONOUT
+PUBLIC CONIN
+PUBLIC EXIT
+PUBLIC CONSTAT
+PUBLIC DELAY
+
+; assembly "syscalls"
+EXIT        EQU 0000h
+CONOUT      EQU 0008h
+CONIN       EQU 0010h
+CONSTAT     EQU 0018h
+DELAY       EQU 0020h
+
+; PL/M API
+API_ADDR SET 0100H
+
+SYSCALL MACRO FNAME
+    PUBLIC FNAME
+    FNAME EQU API_ADDR
+    API_ADDR SET API_ADDR + 3
+ENDM
+
+$INCLUDE (asm/api.asm)
+
+; Entry point
+    ORG 2000H ; in RAM
+
+ENTRY:
+    CALL MAIN
+    RET
+
+END

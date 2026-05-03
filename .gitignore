@@ -1,0 +1,7 @@
+out
+obj
+*.lst
+*.obj
+*.hex
+*.map
+*.abs
