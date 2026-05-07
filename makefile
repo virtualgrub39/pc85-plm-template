@@ -9,6 +9,7 @@ PLMC   = ./bin/plm80c$(BINEXT)
 LN     = ./bin/link$(BINEXT)
 LOCATE = ./bin/locate$(BINEXT)
 OBJHEX = ./bin/objhex$(BINEXT)
+HEXBIN = ./bin/hexbin.py
 
 SOURCE_DIR = src
 ASM_DIR = asm
@@ -39,11 +40,12 @@ hello_SRC_PLM = $(SOURCE_DIR)/hello.plm
 hello_SRC_ASM = 
 
 PROGRAM_HEXES = $(addprefix $(OUT_DIR)/, $(addsuffix .hex, $(PROGRAMS)))
+PROGRAM_BINS = $(addprefix $(OUT_DIR)/, $(addsuffix .bin, $(PROGRAMS)))
 
 # ==========================================
 #             BUILD TARGETS
 # ==========================================
-all: $(PROGRAM_HEXES)
+all: $(PROGRAM_HEXES) $(PROGRAM_BINS)
 
 $(OBJ_DIR) $(OUT_DIR):
 	mkdir -p $@
@@ -73,6 +75,11 @@ $$(OBJ_DIR)/$(1).abs: $$(OBJ_DIR)/$(1).obj
 # Hex
 $$(OUT_DIR)/$(1).hex: $$(OBJ_DIR)/$(1).abs | $$(OUT_DIR)
 	$$(OBJHEX) $$< TO $$@
+
+# Bin
+$$(OUT_DIR)/$(1).bin: $$(OUT_DIR)/$(1).hex
+	$$(HEXBIN) $$< $$@
+
 endef
 
 $(foreach prog,$(PROGRAMS),$(eval $(call PROGRAM_template,$(prog))))

@@ -2,18 +2,19 @@ HELLO: DO;
 
 $INCLUDE (inc/const.inc)
 $INCLUDE (inc/conio.inc)
+$INCLUDE (inc/control.inc)
 
     MAIN: PROCEDURE PUBLIC;
         DECLARE BUFFER (16) BYTE;
         DECLARE NREAD BYTE;
         DECLARE ARGS ADDRESS;
 
-        CALL PRINTLN(.('What''s your name?', 0));
+        CALL PRINTLN(.('What''s Your name?', 0));
 
-        IF READLINE(.BUFFER, 16) > 0 THEN ARGS = .BUFFER;
-        ELSE ARGS = .('Anon', 0);
+        IF READLINE(.BUFFER, 16, TRUE) > 0 THEN ARGS = .BUFFER;
+        ELSE CALL EXIT;
 
-        CALL PRINTF(.('Hello %S!', CRLF, 0), .ARGS);
+        CALL PRINTF(.('Hello, %S!', CRLF, 0), .ARGS);
     END MAIN;
 
 END HELLO;
